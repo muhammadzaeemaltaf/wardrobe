@@ -1,15 +1,20 @@
 "use client";
 
 import React, { useCallback, useEffect, useState, useRef } from "react";
-import PropTypes from "prop-types";
 import "./slider.css";
 
-const MultiRangeSlider = ({ min, max, onChange }: any) => {
+interface MultiRangeSliderProps {
+  min: number;
+  max: number;
+  onChange: (values: { min: number; max: number }) => void;
+}
+
+const MultiRangeSlider: React.FC<MultiRangeSliderProps> = ({ min, max, onChange }) => {
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
   const minValRef = useRef(min);
   const maxValRef = useRef(max);
-  const range = useRef(null);
+  const range = useRef<HTMLDivElement>(null);
 
   // Convert to percentage
   const getPercent = useCallback(
@@ -87,12 +92,6 @@ const MultiRangeSlider = ({ min, max, onChange }: any) => {
       </div>
     </div>
   );
-};
-
-MultiRangeSlider.propTypes = {
-  min: PropTypes.number.isRequired,
-  max: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired
 };
 
 export default MultiRangeSlider;

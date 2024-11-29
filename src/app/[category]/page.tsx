@@ -20,7 +20,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const page = ({ params: { category } }: { params: { category: string } }) => {
+const Page = ({ params: { category } }: { params: { category: string } }) => {
   console.log(category);
   const decodedCategory = decodeURIComponent(category);
   const [products, setProducts] = useState<Products[]>([]);
@@ -36,7 +36,7 @@ const page = ({ params: { category } }: { params: { category: string } }) => {
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [decodedCategory]);
 
   useEffect(() => {
     const wishlistData = getWishlist();
@@ -237,4 +237,4 @@ const page = ({ params: { category } }: { params: { category: string } }) => {
   );
 };
 
-export default page;
+export default Page;

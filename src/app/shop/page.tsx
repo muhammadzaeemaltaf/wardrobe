@@ -33,7 +33,7 @@ const Page = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 9;
   const [filteredProducts, setFilteredProducts] = useState<Products[]>([]);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  // const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [wishlist, setWishlist] = useState<number[]>([]);
 
@@ -55,19 +55,20 @@ const Page = () => {
   // Filter products when the price range changes
   useEffect(() => {
     const filterByPrice = () => {
-      const filtered = products.filter(
-        (product) =>
-          product.price >= priceRange[0] && product.price <= priceRange[1]
-      );
+      // const filtered = products.filter(
+      //   (product) =>
+      //     product.price >= priceRange[0] && product.price <= priceRange[1]
+      // );
+      const filtered = products;
       setFilteredProducts(filtered);
     };
 
     filterByPrice();
-  }, [priceRange, products]);
-
-  const handlePriceChange = ([min, max]: [number, number]) => {
-    // setPriceRange([min, max]);
-  };
+  }, [ products]);
+  // priceRange
+  // const handlePriceChange = ([min, max]: [number, number]) => {
+  //   // setPriceRange([min, max]);
+  // };
 
   const handleWishlistToggle = (productId: number) => {
     if (wishlist.includes(productId)) {
@@ -142,7 +143,7 @@ const Page = () => {
             <MultiRangeSlider
               min={0}
               max={1000}
-              onChange={({ min, max }) => handlePriceChange([min, max])}
+              onChange={({ min, max }) => console.log([min, max])}
             />
           </div>
         </div>

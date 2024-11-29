@@ -95,7 +95,7 @@ const SkeletonLoader = () => (
   </section>
 );
 
-const page = ({ params: { id } }: { params: { id: number } }) => {
+const Page = ({ params: { id } }: { params: { id: number } }) => {
   const [product, setProduct] = useState<Products | null>(null);
   const [loading, setLoading] = useState(true);
   const [wishlist, setWishlist] = useState<number[]>([]);
@@ -315,4 +315,4 @@ const page = ({ params: { id } }: { params: { id: number } }) => {
   );
 };
 
-export default page;
+export default Page;
