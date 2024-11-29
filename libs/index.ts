@@ -33,24 +33,31 @@ async function SingleProduct(id: number): Promise<Products>{
 
 // Wishlist functions
 function getWishlist(): number[] {
-  const wishlist = localStorage.getItem("wishlist");
-  return wishlist ? JSON.parse(wishlist) : [];
+  if (typeof localStorage !== 'undefined') {
+    const wishlist = localStorage.getItem("wishlist");
+    return wishlist ? JSON.parse(wishlist) : [];
+  }
+  return [];
 }
 
 function addToWishlist(productId: number): void {
-  const wishlist = getWishlist();
-  if (!wishlist.includes(productId)) {
-    wishlist.push(productId);
-    localStorage.setItem("wishlist", JSON.stringify(wishlist));
-    window.dispatchEvent(new Event("wishlistUpdated"));
+  if (typeof localStorage !== 'undefined') {
+    const wishlist = getWishlist();
+    if (!wishlist.includes(productId)) {
+      wishlist.push(productId);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      window.dispatchEvent(new Event("wishlistUpdated"));
+    }
   }
 }
 
 function removeFromWishlist(productId: number): void {
-  let wishlist = getWishlist();
-  wishlist = wishlist.filter((id) => id !== productId);
-  localStorage.setItem("wishlist", JSON.stringify(wishlist));
-  window.dispatchEvent(new Event("wishlistUpdated"));
+  if (typeof localStorage !== 'undefined') {
+    let wishlist = getWishlist();
+    wishlist = wishlist.filter((id) => id !== productId);
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    window.dispatchEvent(new Event("wishlistUpdated"));
+  }
 }
 
 
