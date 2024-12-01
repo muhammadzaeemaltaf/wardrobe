@@ -7,6 +7,7 @@ import {
   Products,
   removeFromWishlist,
   SingleProduct,
+  addRecentlyViewedProduct,
 } from "../../../../libs";
 import Image from "next/image";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
@@ -104,6 +105,8 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
       const data: Products = await SingleProduct(id);
       setProduct(data);
       setLoading(false);
+
+      addRecentlyViewedProduct(data);
     };
     fetchData();
   }, [id]);
@@ -157,8 +160,8 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
   };
 
   return (
-    <section className="py-8">
-      <div className="container">
+    <section className="py-8">  
+      <div className="container !px-2 lg:!px-4">
         <div className="grid lg:grid-cols-[40%_auto] gap-4 mb-4 border-b pb-6">
           <div className="rounded-lg overflow-hidden relative bg-black">
             <Image
@@ -172,7 +175,7 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
               {product.category}
             </div>
           </div>
-          <div className="flex flex-col gap-4 p-6">
+          <div className="flex flex-col gap-4 p-3 lg:p-6">
             <h1 className="font-semibold leading-tight text-4xl">
               {product.title}
             </h1>
@@ -181,7 +184,7 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
             </div>
             <p className="text-xl tracking-tighter">{product.description}</p>
             <div className="flex items-center gap-4">
-              <p className="font-bold text-lg">$ {product.price}</p>
+              <p className="font-bold text-lg whitespace-nowrap">$ {product.price}</p>
               <p className="text-md">
                 {getStockStatus(product.rating.count)} ({product.rating.count}{" "}
                 pieces remaining)
@@ -221,7 +224,7 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
                     </Label>
                   </RadioGroup>
                 </div>
-                <div className="grid gap-2">
+                <div className="flex flex-wrap gap-2">
                   <Label htmlFor="size" className="text-base">
                     Size
                   </Label>
@@ -303,14 +306,14 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
             </div>
           </div>
         </div>
-
-        <ProductSection
+      </div>
+      
+      <ProductSection
           dataFetcher={() => Categories(product.category)}
           heading="Related Products"
           link={`/${product.category}`}
           excludeId={product.id}
         />
-      </div>
     </section>
   );
 };

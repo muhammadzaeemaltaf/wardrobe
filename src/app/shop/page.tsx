@@ -8,6 +8,7 @@ import {
   getWishlist,
   addToWishlist,
   removeFromWishlist,
+  getRecentlyViewedProducts,
 } from "../../../libs";
 import Image from "next/image";
 import { MdNavigateBefore, MdOutlineNavigateNext } from "react-icons/md";
@@ -33,9 +34,11 @@ const Page = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 9;
   const [filteredProducts, setFilteredProducts] = useState<Products[]>([]);
-  // const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [wishlist, setWishlist] = useState<number[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [recentlyViewed, setRecentlyViewed] = useState<Products[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,8 +46,16 @@ const Page = () => {
       setProducts(data);
       setFilteredProducts(data);
       setLoading(false);
+
+      const categories = Array.from(
+        new Set(data.map((product) => product.category))
+      );
+      setCategories(categories);
     };
     fetchData();
+
+    const recentlyViewedProducts = getRecentlyViewedProducts();
+    setRecentlyViewed(recentlyViewedProducts);
   }, []);
 
   useEffect(() => {
@@ -52,23 +63,21 @@ const Page = () => {
     setWishlist(wishlistData);
   }, []);
 
-  // Filter products when the price range changes
   useEffect(() => {
     const filterByPrice = () => {
-      // const filtered = products.filter(
-      //   (product) =>
-      //     product.price >= priceRange[0] && product.price <= priceRange[1]
-      // );
-      const filtered = products;
+      const filtered = products.filter(
+        (product) =>
+          product.price >= priceRange[0] && product.price <= priceRange[1]
+      );
       setFilteredProducts(filtered);
     };
 
     filterByPrice();
-  }, [ products]);
-  // priceRange
-  // const handlePriceChange = ([min, max]: [number, number]) => {
-  //   // setPriceRange([min, max]);
-  // };
+  }, [products, priceRange]);
+
+  const handlePriceChange = ([min, max]: [number, number]) => {
+    setPriceRange([min, max]);
+  };
 
   const handleWishlistToggle = (productId: number) => {
     if (wishlist.includes(productId)) {
@@ -128,7 +137,7 @@ const Page = () => {
       )}
       <div className="container relative grid grid-cols-1 lg:grid-cols-[30%_auto] gap-4">
         <div
-          className={`border sideMenu p-4 !bg-white z-30 fixed h-screen top-0 w-[80%] md:w-1/2 transition-all duration-300 lg:relative lg:top-auto lg:w-auto lg:left-auto ${
+          className={`sideMenu p-4 !bg-white z-30 fixed min-h-screen  top-0 w-[80%] md:w-1/2 transition-all duration-300 lg:relative lg:top-auto lg:w-auto lg:left-auto ${
             isSideMenuOpen ? "left-0" : "-left-full"
           }`}
         >
@@ -138,13 +147,94 @@ const Page = () => {
           >
             <IoClose size={24} />
           </button>
-          <h3 className="text-lg font-semibold mb-4">Filter by Price</h3>
-          <div className="flex items-center gap-2">
-            <MultiRangeSlider
-              min={0}
-              max={1000}
-              onChange={({ min, max }) => console.log([min, max])}
-            />
+
+          <div className="sticky top-4">
+            {loading ? (
+              <>
+                <div className="h-8 bg-gray-300 rounded w-1/3 animate-pulse"></div>
+                <div className="px-4 md:px-6 mt-4 mb-6">
+                  <div className="h-4 bg-gray-300 rounded w-full animate-pulse"></div>
+                </div>
+                <div className="h-8 bg-gray-300 rounded w-1/3 animate-pulse"></div>
+                <div className="flex gap-2 my-6">
+                  {Array.from({ length: 4 }).map((_, index) => (
+                    <div
+                      key={index} 
+                      className="h-8 bg-gray-300 rounded w-1/3 animate-pulse"
+                    ></div>
+                  ))}
+                </div>
+                <div className="h-8 bg-gray-300 rounded w-1/3 animate-pulse mt-4"></div>
+                <div className="flex gap-2 flex-col mt-4">
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <div
+                      key={index} 
+                      className="h-20 bg-gray-300 rounded w-full animate-pulse"
+                    ></div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="text-lg font-semibold mb-4">Filter by Price</h3>
+                <div className="flex items-center gap-2 px-4 md:px-6 mt-6">
+                  <MultiRangeSlider
+                    min={0}
+                    max={1000}
+                    onChange={({ min, max }) => handlePriceChange([min, max])}
+                  />
+                </div>
+                <div className="mt-14">
+                  <h3 className="text-lg font-semibold mb-4">Top Categories</h3>
+                  <div className="flex flex-wrap gap-4">
+                    {categories.map((category) => (
+                      <Link
+                        href={`/${category}`}
+                        key={category}
+                        className="block text-center py-2 text-sm bg-black text-white hover:bg-black/70 transition-all duration-150 rounded-full px-4"
+                      >
+                        {category
+                          .split(" ")
+                          .map((word) => word[0].toUpperCase() + word.slice(1))
+                          .join(" ")}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-14">
+                  <h3 className="text-lg font-semibold mb-4">
+                    Recently Viewed
+                  </h3>
+                  <div className="flex flex-col gap-4">
+                    {recentlyViewed.map((product) => (
+                      <Link
+                        href={`/shop/${product.id}`}
+                        key={product.id}
+                        className="grid grid-cols-[20%_auto] items-center gap-4 border-b pb-4"
+                      >
+                        <div className="w-full aspect-square rounded-xl overflow-hidden border">
+                          <Image
+                            src={product.image}
+                            alt={product.title}
+                            width={1000}
+                            height={1000}
+                            className="object-contain w-full h-full"
+                          />
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-medium line-clamp-2">
+                            {product.title}
+                          </h4>
+                          <p className="text-xs text-gray-500">
+                            ${product.price}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className="">
@@ -196,28 +286,27 @@ const Page = () => {
                       >
                         {wishlist.includes(product.id) ? (
                           <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger> 
-                            <IoHeart className="text-lg transition-all ease-in duration-150 group-active:animate-ping" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Remove from wishlist</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                       
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <IoHeart className="text-lg transition-all ease-in duration-150 group-active:animate-ping" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Remove from wishlist</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
                         ) : (
                           <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger> 
-                            <IoHeartOutline className="text-lg transition-all ease-in duration-150 group-active:animate-ping" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Add to To wishlist</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                       )}
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <IoHeartOutline className="text-lg transition-all ease-in duration-150 group-active:animate-ping" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Add to To wishlist</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
                       </button>
                       <p className="text-xs font-semibold bg-gray-50 rounded-full h-14 w-14 flex justify-center items-center">
                         ${product.price}
@@ -245,7 +334,10 @@ const Page = () => {
                         <button className="bg-black text-white px-4 pt-2 rounded-full w-fit relative">
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger> <IoCartOutline /></TooltipTrigger>
+                              <TooltipTrigger>
+                                {" "}
+                                <IoCartOutline />
+                              </TooltipTrigger>
                               <TooltipContent>
                                 <p>Add to cart</p>
                               </TooltipContent>
@@ -288,6 +380,7 @@ const Page = () => {
           </div>
         </div>
       </div>
+
       <button
         className="bg-black/90 w-fit aspect-square text-white fixed bottom-4 right-4 z-50 rounded-full p-3 lg:hidden"
         onClick={() => setIsSideMenuOpen(true)}

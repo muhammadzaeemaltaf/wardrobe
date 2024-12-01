@@ -25,7 +25,6 @@ const ProductSection: React.FC<ProductSectionProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       const data = await dataFetcher();
-      // Filter out the product with excludeId
       const filteredData = excludeId
         ? data.filter((product) => product.id !== excludeId)
         : data;
@@ -35,10 +34,8 @@ const ProductSection: React.FC<ProductSectionProps> = ({
     fetchData();
   }, [dataFetcher, excludeId]);
 
-  // Determine the products to display
   const displayProducts = products.slice(0, 4);
 
-  // Adjust grid classes based on the number of products
   const gridClassName = `grid gap-6 ${
     displayProducts.length < 4
       ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 justify-center lg:w-[80%] mx-auto'

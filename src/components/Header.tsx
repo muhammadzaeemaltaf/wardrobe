@@ -2,7 +2,12 @@
 
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
-import { IoCartOutline, IoCloseSharp, IoHeartOutline, IoSearchOutline } from "react-icons/io5";
+import {
+  IoCartOutline,
+  IoCloseSharp,
+  IoHeartOutline,
+  IoSearchOutline,
+} from "react-icons/io5";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { RiMenu4Fill } from "react-icons/ri";
 import {
@@ -118,12 +123,26 @@ const Header = () => {
           </div>
           <ul className="flex flex-col lg:flex-row items-center gap-4">
             <li>
-              <Link href={"/"} className="link">
+              <Link
+                href={"/"}
+                className="link"
+                onClick={() => {
+                  toggleDropdown();
+                  handleMenu();
+                }}
+              >
                 Home
               </Link>
             </li>
             <li>
-              <Link href={"/shop"} className="link">
+              <Link
+                href={"/shop"}
+                className="link"
+                onClick={() => {
+                  toggleDropdown();
+                  handleMenu();
+                }}
+              >
                 Shop
               </Link>
             </li>
@@ -152,6 +171,7 @@ const Header = () => {
                           href={`/${category}`}
                           onClick={() => {
                             toggleDropdown();
+                            handleMenu();
                           }}
                         >
                           {category
@@ -170,12 +190,26 @@ const Header = () => {
               )}
             </li>
             <li>
-              <Link href={"/about"} className="link">
+              <Link
+                href={"/about"}
+                className="link"
+                onClick={() => {
+                  toggleDropdown();
+                  handleMenu();
+                }}
+              >
                 About
               </Link>
             </li>
             <li>
-              <Link href={"/contact"} className="link">
+              <Link
+                href={"/contact"}
+                className="link"
+                onClick={() => {
+                  toggleDropdown();
+                  handleMenu();
+                }}
+              >
                 Contact
               </Link>
             </li>
@@ -192,10 +226,12 @@ const Header = () => {
             <MdOutlineAccountCircle className="cursor-pointer" />
           </div>
           <div className="relative">
-            <IoHeartOutline className="cursor-pointer" />
-            <span className="text-xs absolute -top-1 -right-1 pointer-events-none flex justify-center items-center w-4 h-4 rounded-full p-2 bg-black/70 text-white">
-              {wishlistCount}
-            </span>
+            <Link href={"/wishlist"}>
+              <IoHeartOutline className="cursor-pointer" />
+              <span className="text-xs absolute -top-1 -right-1 pointer-events-none flex justify-center items-center w-4 h-4 rounded-full p-2 bg-black/70 text-white">
+                {wishlistCount}
+              </span>
+            </Link>
           </div>
           <div>
             <IoCartOutline onClick={handleCart} className="cursor-pointer" />

@@ -48,13 +48,13 @@ const tl = gsap.timeline()
       <div className="container flex flex-col md:flex-row gap-8 items-center">
         <div className="space-y-3 md:w-[55%] flex flex-col items-center md:items-start">
           <h1 className="text-3xl text-center md:text-start lg:text-6xl font-bold md:text-balance">
-            Let&apos;s Enchance your <span>Wardrobe</span>{" "}
+            Let&apos;s Enchance your <span>Wardrobee</span>{" "}
             with our latest collection.
           </h1>
           <p className="text-lg text-balance text-center md:text-start">We sell only the most exclusive and high quailty product for you. We are the best so come and shop with us.</p>
           <Link href={"/shop"} className="border rounded-full px-4 py-2">Shop Now</Link>
         </div>
-        <div className="md:w-[45%] aspect-square  justify-end">
+        <div className="xs:w-[350px] md:w-[45%] aspect-square  justify-end">
           <div className="grid grid-cols-5 rounded-full overflow-hidden relative aspect-square gap-2 w-full h-full">
             <div className="w-full overflow-hidden h-full sideImage">
               <Image
