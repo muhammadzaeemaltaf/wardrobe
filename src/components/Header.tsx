@@ -127,7 +127,7 @@ const Header = () => {
                 href={"/"}
                 className="link"
                 onClick={() => {
-                  toggleDropdown();
+                  setDropdownOpen(false);
                   handleMenu();
                 }}
               >
@@ -139,7 +139,7 @@ const Header = () => {
                 href={"/shop"}
                 className="link"
                 onClick={() => {
-                  toggleDropdown();
+                  setDropdownOpen(false);
                   handleMenu();
                 }}
               >
@@ -194,7 +194,7 @@ const Header = () => {
                 href={"/about"}
                 className="link"
                 onClick={() => {
-                  toggleDropdown();
+                  setDropdownOpen(false);
                   handleMenu();
                 }}
               >
@@ -206,7 +206,7 @@ const Header = () => {
                 href={"/contact"}
                 className="link"
                 onClick={() => {
-                  toggleDropdown();
+                  setDropdownOpen(false);
                   handleMenu();
                 }}
               >
