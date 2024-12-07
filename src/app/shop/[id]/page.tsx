@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 
-import { useToast } from "@/components/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import {
   addToWishlist,
@@ -102,8 +101,6 @@ const SkeletonLoader = () => (
 );
 
 const Page = ({ params: { id } }: { params: { id: number } }) => {
-  const { toast } = useToast();
-
   const [product, setProduct] = useState<Products | null>(null);
   const [loading, setLoading] = useState(true);
   const [wishlist, setWishlist] = useState<number[]>([]);
@@ -330,9 +327,10 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
               </form>
             </div>
             <div className="flex gap-2">
-              <button
+              <Button
                 onClick={() => handleWishlistToggle(product.id)}
-                className="rounded-lg px-16 py-2 border border-black flex gap-2 justify-center items-center transition-all duration-150 hover:text-white hover:bg-black group"
+                variant={'outline'}
+                className="rounded-lg px-[4.6rem] py-5 border border-black flex gap-2 justify-center items-center transition-all duration-150  hover:text-white hover:bg-black group"
               >
                 {wishlist.includes(product.id) ? (
                   <IoHeart className="text-lg transition-all ease-in duration-150 group-active:animate-ping" />
@@ -340,7 +338,7 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
                   <IoHeartOutline className="text-lg transition-all ease-in duration-150 group-active:animate-ping" />
                 )}
                 Add to wishlist
-              </button>
+              </Button>
             </div>
           </div>
         </div>
