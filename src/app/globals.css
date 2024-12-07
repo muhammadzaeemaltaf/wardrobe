@@ -90,3 +90,7 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.cartList::-webkit-scrollbar{
+  display: none;
+}

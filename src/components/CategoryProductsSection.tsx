@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Data, Products } from "../../libs";
+import { addToCart, CartProduct, Data, Products } from "../../libs";
 import Image from "next/image";
 import Link from "next/link";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
@@ -30,6 +30,20 @@ const CategoryProductsSection = () => {
     ? products.filter((product) => product.category === selectedCategory)
     : products;
 
+
+    const handleAddToCart = (product: Products) => {
+      const cartProduct: CartProduct = {
+        id: product.id,
+        title: product.title,
+        image: product.image,
+        price: product.price,
+        rate: product.rating.rate,
+        color: "black",
+        size: "M",
+        itemCount: 1,
+      };
+      addToCart(cartProduct);
+    };
   return (
     <section className="py-8">
       <div className="container space-y-6">
@@ -93,7 +107,9 @@ const CategoryProductsSection = () => {
                         href={`/shop/${product.id}`}
                       />
 
-                      <button className="bg-white text-black px-4 py-2 rounded-full relative">
+                      <button className="bg-white text-black px-4 py-2 rounded-full relative"
+                        onClick={() => handleAddToCart(product)}
+                      >
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger> Add to cart</TooltipTrigger>

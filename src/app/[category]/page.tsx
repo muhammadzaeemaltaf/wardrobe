@@ -7,6 +7,8 @@ import {
   getWishlist,
   addToWishlist,
   removeFromWishlist,
+  addToCart,
+  CartProduct,
 } from "../../../libs";
 import Image from "next/image";
 import { MdNavigateBefore, MdOutlineNavigateNext } from "react-icons/md";
@@ -51,6 +53,20 @@ const Page = ({ params: { category } }: { params: { category: string } }) => {
       addToWishlist(productId);
       setWishlist([...wishlist, productId]);
     }
+  };
+
+  const handleAddToCart = (product: Products) => {
+    const cartProduct: CartProduct = {
+      id: product.id,
+      title: product.title,
+      image: product.image,
+      price: product.price,
+      rate: product.rating.rate,
+      color: "black",
+      size: "M",
+      itemCount: 1,
+    };
+    addToCart(cartProduct);
   };
 
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -131,7 +147,7 @@ const Page = ({ params: { category } }: { params: { category: string } }) => {
                       className="absolute inset-0"
                     />
                     <div className="flex justify-between items-start w-full absolute right-0 px-2 top-2">
-                      <button
+                      <span
                         onClick={() => handleWishlistToggle(product.id)}
                         className="text-xs font-semibold rounded-full h-10 w-10 flex justify-center items-center group"
                       >
@@ -158,7 +174,7 @@ const Page = ({ params: { category } }: { params: { category: string } }) => {
                             </Tooltip>
                           </TooltipProvider>
                         )}
-                      </button>
+                      </span>
                       <p className="text-xs font-semibold bg-gray-50 rounded-full h-14 w-14 flex justify-center items-center">
                         ${product.price}
                       </p>
@@ -182,7 +198,9 @@ const Page = ({ params: { category } }: { params: { category: string } }) => {
                         </div>
                       </div>
                       <div className="w-full text-end">
-                        <button className="bg-black text-white px-4 pt-2 rounded-full w-fit relative">
+                        <span className="bg-black text-white px-4 pb-1 pt-2 rounded-full w-fit relative"
+                        onClick={() => handleAddToCart(product)}
+                        >
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger>
@@ -194,7 +212,7 @@ const Page = ({ params: { category } }: { params: { category: string } }) => {
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
-                        </button>
+                        </span>
                       </div>
                     </div>
                   </div>

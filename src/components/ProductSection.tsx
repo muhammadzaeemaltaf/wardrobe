@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Products } from "../../libs"; // Adjust the import path as necessary
+import { addToCart, CartProduct, Products } from "../../libs"; // Adjust the import path as necessary
 import Image from "next/image";
 import Link from "next/link";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
@@ -12,6 +12,7 @@ interface ProductSectionProps {
   link: string;
   excludeId?: number;
 }
+
 
 const ProductSection: React.FC<ProductSectionProps> = ({
   dataFetcher,
@@ -37,11 +38,25 @@ const ProductSection: React.FC<ProductSectionProps> = ({
   const displayProducts = products.slice(0, 4);
 
   const gridClassName = `grid gap-6 ${
-    displayProducts.length < 4
+    !loading &&  displayProducts.length < 4 
       ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 justify-center lg:w-[80%] mx-auto'
       : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
   }`;
 
+
+  const handleAddToCart = (product: Products) => {
+    const cartProduct: CartProduct = {
+      id: product.id,
+      title: product.title,
+      image: product.image,
+      price: product.price,
+      rate: product.rating.rate,
+      color: "black",
+      size: "M",
+      itemCount: 1,
+    };
+    addToCart(cartProduct);
+  };
   return (
     <section className="py-8">
       <div className="container space-y-6">
@@ -90,7 +105,9 @@ const ProductSection: React.FC<ProductSectionProps> = ({
                         href={`/shop/${product.id}`}
                       />
 
-                      <button className="bg-white text-black px-4 py-2 rounded-full relative">
+                      <button className="bg-white text-black px-4 py-2 rounded-full relative"
+                      onClick={() => handleAddToCart(product)}
+                      >
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger>

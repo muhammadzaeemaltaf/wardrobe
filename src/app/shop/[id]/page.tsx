@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+
+import { useToast } from "@/components/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 import {
   addToWishlist,
   Categories,
@@ -8,6 +11,8 @@ import {
   removeFromWishlist,
   SingleProduct,
   addRecentlyViewedProduct,
+  addToCart,
+  CartProduct,
 } from "../../../../libs";
 import Image from "next/image";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
@@ -25,7 +30,7 @@ import {
 
 const SkeletonLoader = () => (
   <section className="py-8">
-    <div className="container">
+    <div className="container animate-pulse">
       <div className="grid lg:grid-cols-[40%_auto] gap-4 mb-4 border-b pb-6">
         <div className="rounded-lg overflow-hidden relative bg-gray-300 h-full"></div>
 
@@ -97,6 +102,8 @@ const SkeletonLoader = () => (
 );
 
 const Page = ({ params: { id } }: { params: { id: number } }) => {
+  const { toast } = useToast();
+
   const [product, setProduct] = useState<Products | null>(null);
   const [loading, setLoading] = useState(true);
   const [wishlist, setWishlist] = useState<number[]>([]);
@@ -159,8 +166,22 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
     }
   };
 
+  const handleAddToCart = (product: Products) => {
+    const cartProduct: CartProduct = {
+      id: product.id,
+      title: product.title,
+      image: product.image,
+      price: product.price,
+      rate: product.rating.rate,
+      color: "black",
+      size: "M",
+      itemCount: 1,
+    };
+    addToCart(cartProduct);
+  };
+
   return (
-    <section className="py-8">  
+    <section className="py-8">
       <div className="container !px-2 lg:!px-4">
         <div className="grid lg:grid-cols-[40%_auto] gap-4 mb-4 border-b pb-6">
           <div className="rounded-lg overflow-hidden relative bg-black">
@@ -184,7 +205,9 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
             </div>
             <p className="text-xl tracking-tighter">{product.description}</p>
             <div className="flex items-center gap-4">
-              <p className="font-bold text-lg whitespace-nowrap">$ {product.price}</p>
+              <p className="font-bold text-lg whitespace-nowrap">
+                $ {product.price}
+              </p>
               <p className="text-md">
                 {getStockStatus(product.rating.count)} ({product.rating.count}{" "}
                 pieces remaining)
@@ -205,26 +228,38 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
                       htmlFor="color-black"
                       className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
                     >
-                      <RadioGroupItem id="color-black" value="black" />
+                      <RadioGroupItem
+                        id="color-black"
+                        value="black"
+                        color="black"
+                      />
                       Black
                     </Label>
                     <Label
                       htmlFor="color-white"
                       className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
                     >
-                      <RadioGroupItem id="color-white" value="white" />
+                      <RadioGroupItem
+                        id="color-white"
+                        value="white"
+                        color="white"
+                      />
                       White
                     </Label>
                     <Label
                       htmlFor="color-blue"
                       className="border cursor-pointer rounded-md p-2 flex items-center gap-2 [&:has(:checked)]:bg-gray-100 dark:[&:has(:checked)]:bg-gray-800"
                     >
-                      <RadioGroupItem id="color-blue" value="blue" />
+                      <RadioGroupItem
+                        id="color-blue"
+                        value="blue"
+                        color="blue"
+                      />
                       Blue
                     </Label>
                   </RadioGroup>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-col flex-wrap gap-2">
                   <Label htmlFor="size" className="text-base">
                     Size
                   </Label>
@@ -285,9 +320,12 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
                       </SelectContent>
                     </Select>
                   </div>
-                  <button className="bg-black flex items-center gap-2 text-white px-6 py-2 rounded-lg relative">
+                  <p
+                    className="bg-black flex items-center gap-2 text-white px-6 py-2 rounded-lg select-none cursor-pointer"
+                    onClick={() => handleAddToCart(product)}
+                  >
                     <IoCartOutline className="text-lg" /> Add to cart
-                  </button>
+                  </p>
                 </div>
               </form>
             </div>
@@ -307,13 +345,13 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
           </div>
         </div>
       </div>
-      
+
       <ProductSection
-          dataFetcher={() => Categories(product.category)}
-          heading="Related Products"
-          link={`/${product.category}`}
-          excludeId={product.id}
-        />
+        dataFetcher={() => Categories(product.category)}
+        heading="Related Products"
+        link={`/${product.category}`}
+        excludeId={product.id}
+      />
     </section>
   );
 };
