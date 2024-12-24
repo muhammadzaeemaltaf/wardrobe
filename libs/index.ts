@@ -152,7 +152,35 @@ const handleItemCount = (id: number, count: number) => {
   window.dispatchEvent(new Event("cartUpdated"));
 };
 
+const handleItemSize = (id: number, size: string) => {
+  const cartData = getCart();
+  const updatedCart = cartData
+    .map((product) => {
+      if (product.id === id) {
+        product.size = size;
+      }
+      return product;
+    })
+    .filter((product) => product.itemCount > 0);
+  localStorage.setItem("cart", JSON.stringify(updatedCart));
+  window.dispatchEvent(new Event("cartUpdated"));
+};
+
+const handleItemColor = (id: number, color: string) => {
+  const cartData = getCart();
+  const updatedCart = cartData
+    .map((product) => {
+      if (product.id === id) {
+        product.color = color;
+      }
+      return product;
+    })
+    .filter((product) => product.itemCount > 0);
+  localStorage.setItem("cart", JSON.stringify(updatedCart));
+  window.dispatchEvent(new Event("cartUpdated"));
+};
 
 
-export { Data, Categories, SingleProduct, getWishlist, addToWishlist, removeFromWishlist, getRecentlyViewedProducts, addRecentlyViewedProduct, getCart, addToCart, removeFromCart, handleItemCount };
+
+export { Data, Categories, SingleProduct, getWishlist, addToWishlist, removeFromWishlist, getRecentlyViewedProducts, addRecentlyViewedProduct, getCart, addToCart, removeFromCart, handleItemCount, handleItemSize, handleItemColor };
 export type { Products, CartProduct };

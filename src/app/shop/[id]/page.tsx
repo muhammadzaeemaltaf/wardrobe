@@ -104,6 +104,9 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
   const [product, setProduct] = useState<Products | null>(null);
   const [loading, setLoading] = useState(true);
   const [wishlist, setWishlist] = useState<number[]>([]);
+  const [selectedColor, setSelectedColor] = useState("black");
+  const [selectedSize, setSelectedSize] = useState("m");
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
   useEffect(() => {
     const fetchData = async () => {
       const data: Products = await SingleProduct(id);
@@ -170,9 +173,9 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
       image: product.image,
       price: product.price,
       rate: product.rating.rate,
-      color: "black",
-      size: "M",
-      itemCount: 1,
+      color: selectedColor,
+      size: selectedSize,
+      itemCount: selectedQuantity,
     };
     addToCart(cartProduct);
   };
@@ -220,6 +223,7 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
                     id="color"
                     defaultValue="black"
                     className="flex items-center gap-2"
+                    onValueChange={(value) => setSelectedColor(value)}
                   >
                     <Label
                       htmlFor="color-black"
@@ -264,6 +268,7 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
                     id="size"
                     defaultValue="m"
                     className="flex items-center gap-2"
+                    onValueChange={(value) => setSelectedSize(value)}
                   >
                     <Label
                       htmlFor="size-xs"
@@ -304,7 +309,10 @@ const Page = ({ params: { id } }: { params: { id: number } }) => {
                     <Label htmlFor="quantity" className="text-base">
                       Quantity
                     </Label>
-                    <Select defaultValue="1">
+                    <Select
+                      defaultValue="1"
+                      onValueChange={(value) => setSelectedQuantity(Number(value))}
+                    >
                       <SelectTrigger className="w-24">
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
