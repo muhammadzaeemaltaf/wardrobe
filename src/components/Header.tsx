@@ -31,6 +31,7 @@ import Image from "next/image";
 import { FaAngleDown } from "react-icons/fa";
 import { Button } from "./ui/button";
 import { CiCircleRemove } from "react-icons/ci";
+import { usePathname } from "next/navigation";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -44,6 +45,7 @@ const Header = () => {
   const [cartList, setCartList] = useState<CartProduct[]>([]);
   const [wishlistCount, setWishlistCount] = useState(0);
   const [cartCount, setCartCount] = useState(0);
+  const pathname = usePathname().includes("cart");
 
   const dropdownRef = useRef(null);
 
@@ -176,6 +178,7 @@ const Header = () => {
                 className="link"
                 onClick={() => {
                   setDropdownOpen(false);
+                  setCartOpen(false);
                   handleMenu();
                 }}
               >
@@ -188,6 +191,7 @@ const Header = () => {
                 className="link"
                 onClick={() => {
                   setDropdownOpen(false);
+                  setCartOpen(false);
                   handleMenu();
                 }}
               >
@@ -219,6 +223,7 @@ const Header = () => {
                           href={`/${category}`}
                           onClick={() => {
                             toggleDropdown();
+                            setCartOpen(false);
                             handleMenu();
                           }}
                         >
@@ -243,6 +248,7 @@ const Header = () => {
                 className="link"
                 onClick={() => {
                   setDropdownOpen(false);
+                  setCartOpen(false);
                   handleMenu();
                 }}
               >
@@ -255,6 +261,7 @@ const Header = () => {
                 className="link"
                 onClick={() => {
                   setDropdownOpen(false);
+                  setCartOpen(false);
                   handleMenu();
                 }}
               >
@@ -295,7 +302,9 @@ const Header = () => {
       <div
         className={`cart z-10 fixed top-0 right-0 h-screen w-[90%] md:w-[50%] lg:w-[30%] bg-white shadow-lg transform ${
           cartOpen ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300 ease-in-out`}
+        } transition-transform duration-300 ease-in-out ${
+          pathname ? "!hidden" : ""
+        }`}
       >
         <div className="flex justify-between items-center p-4 border-b">
           <h2 className="text-xl font-bold relative">
@@ -365,37 +374,35 @@ const Header = () => {
           )}
         </div>
 
-       {cartList.length > 0 && (
-         <div className="px-4 py-2 border-t-2 space-y-4">
-         <div className="flex justify-between gap-3">
-           <p className="flex-1 text-lg font-semibold">Total</p>
-           <p className="flex-1 text-center font-semibold">
-             {cartList
-               .map((item) => item.itemCount)
-               .reduce((acc, item) => acc + item, 0)}{" "}
-             items
-           </p>
-           <p className="flex-1 text-lg text-end font-semibold">
-             $
-             {cartList
-               .reduce((acc, item) => acc + item.price * item.itemCount, 0)
-               .toFixed(2)}
-           </p>
-         </div>
-         <div className="flex gap-4">
-           <div className="flex-1">
-             <Button className="w-full border" variant="outline">
-              <Link href={"/cart"}>
-               View Cart
-              </Link>
-             </Button>
-           </div>
-           <div className="flex-1">
-             <Button className="w-full">Checkout</Button>
-           </div>
-         </div>
-       </div>
-       )}
+        {cartList.length > 0 && (
+          <div className="px-4 py-2 border-t-2 space-y-4">
+            <div className="flex justify-between gap-3">
+              <p className="flex-1 text-lg font-semibold">Total</p>
+              <p className="flex-1 text-center font-semibold">
+                {cartList
+                  .map((item) => item.itemCount)
+                  .reduce((acc, item) => acc + item, 0)}{" "}
+                items
+              </p>
+              <p className="flex-1 text-lg text-end font-semibold">
+                $
+                {cartList
+                  .reduce((acc, item) => acc + item.price * item.itemCount, 0)
+                  .toFixed(2)}
+              </p>
+            </div>
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <Button className="w-full border" variant="outline">
+                  <Link href={"/cart"}>View Cart</Link>
+                </Button>
+              </div>
+              <div className="flex-1">
+                <Button className="w-full">Checkout</Button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
