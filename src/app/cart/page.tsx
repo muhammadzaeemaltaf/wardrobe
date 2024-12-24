@@ -20,8 +20,8 @@ import { Label } from "@/components/ui/label";
 export default function Page() {
   const [loading, setLoading] = useState(true);
   const [cartList, setCartList] = useState<CartProduct[]>([]);
-  const [selectedColor, setSelectedColor] = useState("black");
-  const [selectedSize, setSelectedSize] = useState("m");
+  // const [selectedColor, setSelectedColor] = useState("black");
+  // const [selectedSize, setSelectedSize] = useState("m");
   const [totalItems, setTotalItems] = useState(0);
   const [subtotal, setSubtotal] = useState<number>(0);
 
@@ -105,7 +105,6 @@ export default function Page() {
                           value={product.color}
                           className="flex items-center gap-2"
                           onValueChange={(value) => {
-                            setSelectedColor(value);
                             product.color = value;
                             handleItemColor(product.id, value);
                           }}
@@ -132,7 +131,6 @@ export default function Page() {
                           value={product.size}
                           className="flex items-center gap-2"
                           onValueChange={(value) => {
-                            setSelectedSize(value);
                             product.size = value;
                             handleItemSize(product.id, value);
                           }}
