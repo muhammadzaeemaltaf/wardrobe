@@ -160,7 +160,13 @@ const Header = () => {
       <nav className="container flex justify-between items-center relative">
         <div>
           <Link href={"#"} className="text-4xl font-bold">
-            Logo
+              <Image
+                src={'/images/Wardrobee.svg'}
+                alt="Wardrobee"
+                width={1000}
+                height={1000}
+                className="w-24 object-cover"
+              />
           </Link>
         </div>
         <div

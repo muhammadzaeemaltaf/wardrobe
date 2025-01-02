@@ -55,7 +55,7 @@ const DownloadBanner = () => {
           {/* Right Column */}
           <div className="flex justify-center items-end">
             <Image
-              src={"/images/Wardrobe.png"}
+              src={"/images/Wardrobee-MOCKUP.png"}
               alt="mockup"
               height={1000}
               width={1000}
